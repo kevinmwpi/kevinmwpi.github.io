@@ -15,7 +15,7 @@ motion, and the page reads the same without it.
 | `assets/site.js` | Scroll motion only: about 170 commented lines, no dependencies. |
 | `assets/fonts/` | The two web fonts, with their license and a note on how they were made. |
 | `assets/og.png` | The image shown when the link is shared (1200 × 630). |
-| `assets/favicon.svg`, `favicon.ico`, `assets/apple-touch-icon.png` | Browser and home-screen icons. |
+| `assets/favicon.svg`, `favicon.ico`, `assets/apple-touch-icon.png` | Browser and home-screen icons: the initials KP in black on the orange. |
 | `404.html` | Shown for any address that does not exist. |
 | `.nojekyll` | Tells GitHub Pages to skip its Jekyll build. |
 
@@ -27,6 +27,11 @@ motion, and the page reads the same without it.
   Projects section and change its text and links.
 - **Colors, spacing, type sizes:** the variables at the top of
   `assets/style.css`.
+- **The tab icon:** `assets/favicon.svg` is the drawing; `favicon.ico` and
+  `assets/apple-touch-icon.png` are pictures of it at 16, 32, 48 and 180
+  pixels. After changing any of them, raise the `?v=` number on the icon
+  links in `index.html` and `404.html`. Browsers keep icons for a long time,
+  and the new number makes them fetch the new file.
 
 ## Preview locally
 

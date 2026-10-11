@@ -1,1 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="#ffa94d" d="M0 0h16v16H0z"/><path d="M2 5h12v2h-2v5h-2V7H6v5H4V7H2z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <!-- The initials KP. Drawn on a 16-unit grid with 2-unit stems, so the
+       letters stay sharp at the 16-pixel size of a browser tab. -->
+  <path fill="#ffa94d" d="M0 0h16v16H0z"/>
+  <path d="M1 3H3V5.3L5.3 3H8L3 8L8 13H5.3L3 10.7V13H1Z"/>
+  <path d="M9 3H12.5A2.5 2.5 0 0 1 15 5.5V6.5A2.5 2.5 0 0 1 12.5 9H11V13H9ZM11 5V7H12.5A0.5 0.5 0 0 0 13 6.5V5.5A0.5 0.5 0 0 0 12.5 5Z"/>
+</svg>
