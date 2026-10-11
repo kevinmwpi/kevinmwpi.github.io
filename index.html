@@ -20,14 +20,15 @@
   <meta property="og:image:alt" content="Kevin Pi, backend software engineer">
   <meta name="twitter:card" content="summary_large_image">
 
-  <!-- Raise ?v= here and in 404.html whenever an icon file changes, so browsers fetch the new one. -->
-  <link rel="icon" href="favicon.ico?v=2" sizes="32x32">
-  <link rel="icon" href="assets/favicon.svg?v=2" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=2">
+  <!-- Raise a file's ?v= number, here and in 404.html, whenever that file
+       changes. Browsers then fetch the new one instead of a saved copy. -->
+  <link rel="icon" href="favicon.ico?v=3" sizes="32x32">
+  <link rel="icon" href="assets/favicon.svg?v=3" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=3">
 
   <link rel="preload" href="assets/fonts/heros-subset-regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/heros-subset-bold.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/style.css?v=2">
   <script src="assets/site.js" defer></script>
 
   <script type="application/ld+json">
@@ -64,7 +65,7 @@
   <header class="hero">
     <h1 class="visually-hidden">Kevin Pi</h1>
 
-    <!-- The orange block: beside PI on a phone, a slab in the right-hand
+    <!-- The accent block: beside PI on a phone, a slab in the right-hand
          column on a desktop. It is only a background. -->
     <div class="block" aria-hidden="true"></div>
 

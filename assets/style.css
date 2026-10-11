@@ -30,16 +30,17 @@
   --gray: #51514e;   /* secondary text, 7:1 on paper */
   --rule: #cfcfca;   /* hairlines between items */
 
-  /* The one color. It is too light to read as text on the paper (1.7:1), so
-     it is only ever a field behind black text (11:1) or a shape. */
-  --accent: #ffa94d;
+  /* The one color, a baby blue. It is too light to read as text on the paper
+     (1.6:1), so it is only ever a field behind black text (12:1) or a shape. */
+  --accent: #8fcaf5;
 
   --margin: 20px;    /* page side margin */
   --gutter: 16px;    /* gap between the 12 columns */
   --cap: 0.729em;    /* cap height of the typeface */
 
-  /* How far an orange field runs past the text on each side. The text inside
-     a field therefore stays on the same grid lines as the text outside it. */
+  /* How far a field of that color runs past the text on each side. The text
+     inside a field therefore stays on the same grid lines as the text outside
+     it. */
   --bleed: var(--margin);
   --inset: clamp(10px, 3.4cqw, 28px);
 
@@ -119,7 +120,7 @@ a:focus-visible {
   outline-offset: 3px;
 }
 
-/* Pointing at a link marks it in orange, like a highlighter. */
+/* Pointing at a link marks it in the accent color, like a highlighter. */
 @media (hover: hover) {
   a:hover {
     background: var(--accent);
@@ -186,7 +187,7 @@ a:focus-visible {
 
 /* 4 Top of page ----------------------------------------------------------- */
 
-/* Phone layout, top to bottom: section links, KEVIN, PI with an orange block
+/* Phone layout, top to bottom: section links, KEVIN, PI with an accent block
    running from its last letter to the edge of the screen, the introduction,
    then availability and contact links. Rows are numbered so the wider layouts
    can rearrange them. */
@@ -223,7 +224,8 @@ a:focus-visible {
 
 /* The name is drawn as outlines, one per letter, so it never waits on a font
    download and its edges sit exactly on the grid. The real heading is the
-   hidden <h1>. As the page slides over it, it turns from black to orange. */
+   hidden <h1>. As the page slides over it, it turns from black to the accent
+   color. */
 
 .name {
   display: block;
@@ -250,7 +252,7 @@ a:focus-visible {
   margin-top: var(--name-gap);
 }
 
-/* The orange block. It starts where PI ends and is exactly as tall. */
+/* The accent block. It starts where PI ends and is exactly as tall. */
 .block {
   grid-column: 1 / -1;
   grid-row: 3;
@@ -309,7 +311,7 @@ a:focus-visible {
 
 /* Everything below the top of the page. It has its own background because it
    slides up over the name as you scroll (see Motion). It is as wide as the
-   page margins so that it also covers the part of the orange block that runs
+   page margins so that it also covers the part of the accent block that runs
    past the text. Its top rule stays the width of the text. */
 .sheet {
   position: relative;
@@ -331,7 +333,7 @@ a:focus-visible {
   scroll-margin-top: var(--bar-h);   /* a jump lands just below the pinned bar */
 }
 
-/* Each section opens with an orange bar three columns wide. */
+/* Each section opens with an accent bar three columns wide. */
 .section::before {
   content: "";
   display: block;
@@ -496,8 +498,9 @@ a:focus-visible {
 }
 
 /* A row that leads somewhere (a project, a way to reach me) can be clicked
-   anywhere, and fills with orange under the pointer. The first link in the
-   row is stretched over it; any other link stays on top and works as usual. */
+   anywhere, and fills with the accent color under the pointer. The first
+   link in the row is stretched over it; any other link stays on top and
+   works as usual. */
 
 .row.is-link::after {
   content: "";
@@ -527,7 +530,7 @@ a:focus-visible {
   }
 
   .row.is-link:hover .small {
-    color: var(--ink);          /* gray is too weak on orange */
+    color: var(--ink);          /* gray is weak on the accent */
   }
 
   /* Inside a filled row a link is marked in black instead. */
@@ -547,7 +550,7 @@ a:focus-visible {
 
 /* 6 Contact and footer ---------------------------------------------------- */
 
-/* Contact is the second orange field: the page opens and closes on orange. */
+/* Contact is the second accent field: the page opens and closes on color. */
 
 .section-contact {
   margin: 56px calc(-1 * var(--bleed)) 0;
@@ -564,7 +567,7 @@ a:focus-visible {
 }
 
 .section-contact .row.is-link::after {
-  background: var(--ink);       /* on orange, a row fills with black instead */
+  background: var(--ink);       /* on the accent, a row fills with black */
 }
 
 @media (hover: hover) {
@@ -592,7 +595,7 @@ a:focus-visible {
 /* 7 Pinned bar ------------------------------------------------------------- */
 
 /* Once the top of the page is covered, a slim bar drops in with the section
-   links. An orange marker sits behind the section being read, and an orange
+   links. An accent marker sits behind the section being read, and an accent
    line along the bottom edge shows how far down the page you are.
    assets/site.js shows and hides it; without scripts it never appears. */
 
@@ -644,7 +647,7 @@ a:focus-visible {
   font-size: clamp(0.8125rem, 4vw, 1rem);
 }
 
-/* The marker: one orange block that slides to whichever link is current. */
+/* The marker: one accent block that slides to whichever link is current. */
 .bar ul::before {
   content: "";
   position: absolute;
@@ -795,7 +798,7 @@ a:focus-visible {
     grid-row: 2 / span 3;
   }
 
-  /* The orange block becomes a slab in the right-hand column, as tall as the
+  /* The accent block becomes a slab in the right-hand column, as tall as the
      two lines of the name and pressed against the N. */
   .block {
     grid-column: 10 / span 3;
@@ -869,7 +872,7 @@ a:focus-visible {
     font-size: clamp(1.0625rem, 1.5cqw, 1.3125rem);
   }
 
-  /* On the slab a link is marked in black instead of orange. */
+  /* On the slab a link is marked in black instead of the accent. */
   @media (hover: hover) {
     .hero-nav a:hover,
     .hero-links a:hover {

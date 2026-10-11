@@ -15,7 +15,7 @@ motion, and the page reads the same without it.
 | `assets/site.js` | Scroll motion only: about 170 commented lines, no dependencies. |
 | `assets/fonts/` | The two web fonts, with their license and a note on how they were made. |
 | `assets/og.png` | The image shown when the link is shared (1200 × 630). |
-| `assets/favicon.svg`, `favicon.ico`, `assets/apple-touch-icon.png` | Browser and home-screen icons: the initials KP in black on the orange. |
+| `assets/favicon.svg`, `favicon.ico`, `assets/apple-touch-icon.png` | Browser and home-screen icons: the initials KP, joined, in black on the blue. |
 | `404.html` | Shown for any address that does not exist. |
 | `.nojekyll` | Tells GitHub Pages to skip its Jekyll build. |
 
@@ -29,9 +29,12 @@ motion, and the page reads the same without it.
   `assets/style.css`.
 - **The tab icon:** `assets/favicon.svg` is the drawing; `favicon.ico` and
   `assets/apple-touch-icon.png` are pictures of it at 16, 32, 48 and 180
-  pixels. After changing any of them, raise the `?v=` number on the icon
-  links in `index.html` and `404.html`. Browsers keep icons for a long time,
-  and the new number makes them fetch the new file.
+  pixels. The 180-pixel one has more room around the letters, because phones
+  round the corners of home-screen icons.
+- **After changing the stylesheet or an icon:** raise the `?v=` number on its
+  link in `index.html` and `404.html`. Browsers keep a stylesheet for up to
+  ten minutes and an icon for much longer; the new number makes them fetch
+  the new file at once.
 
 ## Preview locally
 
@@ -57,11 +60,14 @@ See `assets/fonts/README.md` for its license.
 
 ## Color
 
-Black on off-white, plus one orange (`--accent` at the top of
-`assets/style.css`). The orange is too light to read as text on the page, so
-it is only ever a field behind black text or a shape: the block beside the
-name, the bar that opens each section, the Contact section, the row under the
+Black on off-white, plus one color: a baby blue (`--accent` at the top of
+`assets/style.css`). The blue is too light to read as text on the page, so it
+is only ever a field behind black text or a shape: the block beside the name,
+the bar that opens each section, the Contact section, the row under the
 pointer.
+
+The icons and the share image carry the same blue as a fixed value. If
+`--accent` changes, they need redrawing too.
 
 ## Motion
 
@@ -70,10 +76,10 @@ and in `assets/site.js`. Delete those and the page shows the same content in
 the same place. Nothing is hidden or delayed for visitors with scripts off or
 whose device asks for reduced motion.
 
-- On load, the letters of the name rise into place and the orange block
+- On load, the letters of the name rise into place and the blue block
   wipes in.
 - The top of the page holds still while the rest slides up over it, and the
-  name turns from black to orange as it is covered.
+  name turns from black to blue as it is covered.
 - Sections and rows that start below the screen settle in as they arrive:
   the rule draws from the left, then the text.
 - Once the name is covered, a bar is pinned to the top with the section

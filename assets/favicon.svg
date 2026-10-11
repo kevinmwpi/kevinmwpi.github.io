@@ -1,7 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-  <!-- The initials KP. Drawn on a 16-unit grid with 2-unit stems, so the
-       letters stay sharp at the 16-pixel size of a browser tab. -->
-  <path fill="#ffa94d" d="M0 0h16v16H0z"/>
-  <path d="M1 3H3V5.3L5.3 3H8L3 8L8 13H5.3L3 10.7V13H1Z"/>
-  <path d="M9 3H12.5A2.5 2.5 0 0 1 15 5.5V6.5A2.5 2.5 0 0 1 12.5 9H11V13H9ZM11 5V7H12.5A0.5 0.5 0 0 0 13 6.5V5.5A0.5 0.5 0 0 0 12.5 5Z"/>
+  <!-- The initials KP as one mark: the arms of the K run into the stem of the
+       P. Each letter is 6 units wide and 12 tall, so together they fill a
+       square with 2 units of margin all round. Drawn on a 16-unit grid with
+       2-unit stems, so it stays sharp at the 16-pixel size of a browser tab. -->
+  <path fill="#8fcaf5" d="M0 0h16v16H0z"/>
+  <path d="M2 2H4V5.5L7.5 2H9V4H8L4 8L8 12H9V14H7.5L4 10.5V14H2Z"/>
+  <path d="M8 2H11.5A2.5 2.5 0 0 1 14 4.5V5.5A2.5 2.5 0 0 1 11.5 8H10V14H8ZM10 4V6H11.5A0.5 0.5 0 0 0 12 5.5V4.5A0.5 0.5 0 0 0 11.5 4Z"/>
 </svg>

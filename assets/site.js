@@ -99,7 +99,7 @@
     markSection(readingId, false);
   }
 
-  // Move the orange marker on the pinned bar to the link for this section.
+  // Move the marker on the pinned bar to the link for this section.
   function markSection(id, force) {
     if (id === currentId && !force) {
       return;
