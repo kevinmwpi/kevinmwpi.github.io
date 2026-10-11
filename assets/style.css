@@ -1,0 +1,1150 @@
+/*
+  kevinmwpi.github.io
+  Plain CSS, no build step. In order:
+  1 Fonts and tokens    2 Base            3 Page grid     4 Top of page
+  5 Sections and rows   6 Contact, footer 7 Pinned bar    8 Tablet
+  9 Desktop             10 Motion         11 Print
+*/
+
+/* 1 Fonts and tokens ------------------------------------------------------ */
+
+@font-face {
+  font-family: "Heros Subset";
+  src: url("fonts/heros-subset-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Heros Subset";
+  src: url("fonts/heros-subset-bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --paper: #f3f3f0;
+  --ink: #000;
+  --gray: #51514e;   /* secondary text, 7:1 on paper */
+  --rule: #cfcfca;   /* hairlines between items */
+
+  /* The one color. It is too light to read as text on the paper (1.7:1), so
+     it is only ever a field behind black text (11:1) or a shape. */
+  --accent: #ffa94d;
+
+  --margin: 20px;    /* page side margin */
+  --gutter: 16px;    /* gap between the 12 columns */
+  --cap: 0.729em;    /* cap height of the typeface */
+
+  /* How far an orange field runs past the text on each side. The text inside
+     a field therefore stays on the same grid lines as the text outside it. */
+  --bleed: var(--margin);
+  --inset: clamp(10px, 3.4cqw, 28px);
+
+  --bar-h: 44px;     /* height of the bar pinned to the top while scrolling */
+
+  /* The name scales with the page. These three follow from the outlines:
+     KEVIN is 2715 units wide and 729 tall, and the gap between its two lines
+     (72 units) matches the gap between the I and the N. */
+  --name-w: 100cqw;
+  --name-h: calc(var(--name-w) * 0.26851);
+  --name-gap: calc(var(--name-w) * 0.02652);
+
+  /* Moves a block of text up so its capitals, not its line box, touch the
+     line it hangs from. Works at any size because it is measured in lh/em. */
+  --trim: calc((var(--cap) - 1lh) / 2);
+
+  /* Updated by assets/site.js while scrolling (on the header and on the
+     pinned bar respectively). Both run from 0 to 1. */
+  --cover: 0;        /* how much of the top of the page has been covered */
+  --progress: 0;     /* how far down the whole page the reader is */
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  color-scheme: light;
+}
+
+/* 2 Base ------------------------------------------------------------------ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1rem/1.5 "Heros Subset", Helvetica, Arial, sans-serif;
+  font-kerning: normal;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--ink);
+}
+
+h1, h2, h3, h4, h5, p, ul {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+ul {
+  padding: 0;
+  list-style-type: "";          /* no bullets, and still announced as a list */
+}
+
+p {
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* Pointing at a link marks it in orange, like a highlighter. */
+@media (hover: hover) {
+  a:hover {
+    background: var(--accent);
+    box-shadow: 0 0 0 0.14em var(--accent);
+    color: var(--ink);
+    text-decoration-color: transparent;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip {
+  position: absolute;
+  left: var(--margin);
+  top: -100px;
+  z-index: 10;
+  padding: 10px 14px;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.skip:focus {
+  top: 12px;
+}
+
+.small {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--gray);
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+/* 3 Page grid ------------------------------------------------------------- */
+
+/* One 12-column grid for the whole page. The top of the page, every row and
+   the footer repeat it, so text in different sections starts on the same
+   vertical lines. */
+
+.page {
+  max-width: calc(1360px + 2 * var(--margin));
+  margin-inline: auto;
+  padding-inline: var(--margin);
+  container-type: inline-size;   /* makes 100cqw the width of the grid */
+}
+
+.hero,
+.row,
+.footer,
+.bar-inner {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+}
+
+/* 4 Top of page ----------------------------------------------------------- */
+
+/* Phone layout, top to bottom: section links, KEVIN, PI with an orange block
+   running from its last letter to the edge of the screen, the introduction,
+   then availability and contact links. Rows are numbered so the wider layouts
+   can rearrange them. */
+
+.hero {
+  padding-bottom: 16px;
+}
+
+.hero-nav {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  padding-block: 6px 10px;
+}
+
+.hero-nav ul,
+.hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 20px;
+}
+
+/* On a phone the section links spread to the full width of KEVIN. */
+.hero-nav ul {
+  justify-content: space-between;
+  column-gap: 8px;
+}
+
+.hero-nav a,
+.hero-links a {
+  display: block;
+  padding-block: 10px;          /* 44px tall, comfortable to tap */
+  text-decoration-line: none;
+}
+
+/* The name is drawn as outlines, one per letter, so it never waits on a font
+   download and its edges sit exactly on the grid. The real heading is the
+   hidden <h1>. As the page slides over it, it turns from black to orange. */
+
+.name {
+  display: block;
+  height: auto;
+  fill: var(--ink);
+}
+
+@supports (color: color-mix(in srgb, red, blue)) {
+  .name {
+    fill: color-mix(in srgb, var(--accent) calc(var(--cover) * 100%), var(--ink));
+  }
+}
+
+.name-first {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  width: 100%;
+}
+
+.name-last {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  width: 27.85%;                /* PI is 27.85% as wide as KEVIN */
+  margin-top: var(--name-gap);
+}
+
+/* The orange block. It starts where PI ends and is exactly as tall. */
+.block {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  /* 2px under the last letter, so no hairline of paper shows between them */
+  margin: var(--name-gap) calc(-1 * var(--bleed)) 0 calc(27.85% - 2px);
+  background: var(--accent);
+}
+
+/* The role sits inside the block, in its bottom left corner. */
+.role {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  align-self: end;
+  margin: 0 0 calc(var(--inset) + var(--trim)) calc(27.85% + var(--inset));
+  font-size: 0.875rem;
+  font-size: clamp(0.875rem, 4.4cqw, 1.3125rem);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.role .place {
+  display: block;
+  font-weight: 400;
+}
+
+.lead {
+  grid-column: 1 / -1;
+  grid-row: 4;
+  max-width: 34em;
+  margin-top: 28px;
+  font-size: 1.125rem;
+  line-height: 1.45;
+  text-wrap: balance;           /* even line lengths, no stray last word */
+}
+
+.cta {
+  grid-column: 1 / -1;
+  grid-row: 5;
+  margin-top: 14px;
+}
+
+.status::before {
+  content: "";
+  display: inline-block;
+  width: 0.56em;
+  height: 0.56em;
+  margin-right: 0.5em;
+  background: var(--accent);
+}
+
+.hero-links {
+  margin-top: 8px;
+}
+
+/* 5 Sections and rows ----------------------------------------------------- */
+
+/* Everything below the top of the page. It has its own background because it
+   slides up over the name as you scroll (see Motion). It is as wide as the
+   page margins so that it also covers the part of the orange block that runs
+   past the text. Its top rule stays the width of the text. */
+.sheet {
+  position: relative;
+  z-index: 1;
+  margin-inline: calc(-1 * var(--margin));
+  padding-inline: var(--margin);
+  background: var(--paper);
+}
+
+.sheet::before {
+  content: "";
+  display: block;
+  height: 1px;
+  background: var(--ink);
+}
+
+.section {
+  padding-top: 56px;
+  scroll-margin-top: var(--bar-h);   /* a jump lands just below the pinned bar */
+}
+
+/* Each section opens with an orange bar three columns wide. */
+.section::before {
+  content: "";
+  display: block;
+  width: calc((100cqw - 11 * var(--gutter)) / 4 + 2 * var(--gutter));
+  height: 10px;
+  margin-bottom: 18px;
+  background: var(--accent);
+  transform-origin: left;
+}
+
+.section > h1,
+.section > h2 {
+  margin: 0 0 22px -0.04em;     /* pulls the first letter onto the margin */
+  font-size: 2.75rem;           /* for browsers without container units */
+  font-size: clamp(2.75rem, 6cqw, 4.75rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.table {
+  border-bottom: 1px solid var(--ink);
+}
+
+/* A row is label, body, aside: stacked on a phone, side by side when wider.
+   A black rule opens each row. Gray rules separate the items inside a row. */
+
+.row {
+  position: relative;
+  isolation: isolate;
+  padding-block: 18px 22px;
+}
+
+.row::before,
+.item + .item::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: var(--ink);
+  transform-origin: left;
+}
+
+.row > * {
+  grid-column: 1 / -1;
+}
+
+.label {
+  font-size: 1.3125rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+/* Team names and field names: a quiet caption on a phone, plain text in the
+   label column when there is room for one. */
+.label-plain {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: 0;
+  color: var(--gray);
+}
+
+.kind {
+  margin-top: 2px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.row > .body,
+.row > .items {
+  margin-top: 10px;
+}
+
+.row > .label-plain + .body,
+.row > .label-plain + .items {
+  margin-top: 6px;
+}
+
+.row > .aside {
+  margin-top: 12px;
+}
+
+.body,
+.desc {
+  max-width: 36em;
+}
+
+.body p + p {
+  margin-top: 0.6em;
+}
+
+.body .title + p {
+  margin-top: 0;
+}
+
+.title {
+  font-weight: 700;
+}
+
+.when {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Work items: title, result, description. */
+
+.item {
+  position: relative;
+  padding-block: 16px 18px;
+}
+
+.item + .item::before {
+  background: var(--rule);
+}
+
+.item:first-child {
+  padding-top: 0;
+}
+
+.item:last-child {
+  padding-bottom: 0;
+}
+
+.result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.4em;
+  margin-block: 2px 4px;
+}
+
+.result strong {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Project and contact links. */
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 20px;
+}
+
+.links a {
+  display: block;
+  padding-block: 8px;
+}
+
+.stack {
+  margin-top: 2px;
+}
+
+.contact-link {
+  display: inline-block;
+  padding-block: 4px;
+  font-size: 1.3125rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+/* A row that leads somewhere (a project, a way to reach me) can be clicked
+   anywhere, and fills with orange under the pointer. The first link in the
+   row is stretched over it; any other link stays on top and works as usual. */
+
+.row.is-link::after {
+  content: "";
+  position: absolute;
+  inset: 0 calc(-1 * var(--bleed));
+  z-index: -1;
+  background: var(--accent);
+  opacity: 0;
+  transition: opacity 120ms linear;
+}
+
+.stretch::after {
+  content: "";
+  position: absolute;
+  inset: 0 calc(-1 * var(--bleed));
+  z-index: 1;
+}
+
+.is-link a:not(.stretch) {
+  position: relative;
+  z-index: 2;
+}
+
+@media (hover: hover) {
+  .row.is-link:hover::after {
+    opacity: 1;
+  }
+
+  .row.is-link:hover .small {
+    color: var(--ink);          /* gray is too weak on orange */
+  }
+
+  /* Inside a filled row a link is marked in black instead. */
+  .is-link a:hover {
+    background: none;
+    box-shadow: none;
+    text-decoration-color: currentColor;
+  }
+
+  .is-link a:not(.stretch):hover {
+    background: var(--ink);
+    box-shadow: 0 0 0 0.14em var(--ink);
+    color: var(--paper);
+    text-decoration-color: transparent;
+  }
+}
+
+/* 6 Contact and footer ---------------------------------------------------- */
+
+/* Contact is the second orange field: the page opens and closes on orange. */
+
+.section-contact {
+  margin: 56px calc(-1 * var(--bleed)) 0;
+  padding: 36px var(--bleed) 44px;
+  background: var(--accent);
+}
+
+.section-contact::before {
+  background: var(--ink);
+}
+
+.section-contact .label-plain {
+  color: var(--ink);
+}
+
+.section-contact .row.is-link::after {
+  background: var(--ink);       /* on orange, a row fills with black instead */
+}
+
+@media (hover: hover) {
+  .section-contact .row.is-link:hover,
+  .section-contact .row.is-link:hover .label-plain,
+  .section-contact .row.is-link:hover a {
+    color: var(--paper);
+  }
+}
+
+.footer {
+  row-gap: 4px;
+  padding-block: 18px 40px;
+}
+
+.footer > * {
+  grid-column: 1 / -1;
+}
+
+.footer a {
+  display: inline-block;
+  padding-block: 10px;
+}
+
+/* 7 Pinned bar ------------------------------------------------------------- */
+
+/* Once the top of the page is covered, a slim bar drops in with the section
+   links. An orange marker sits behind the section being read, and an orange
+   line along the bottom edge shows how far down the page you are.
+   assets/site.js shows and hides it; without scripts it never appears. */
+
+.bar {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 5;
+  border-bottom: 1px solid var(--ink);
+  background: var(--paper);
+  transform: translateY(-110%);
+  visibility: hidden;
+}
+
+.is-pinned .bar {
+  transform: none;
+  visibility: visible;
+}
+
+.bar::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px;
+  height: 3px;
+  background: var(--accent);
+  transform: scaleX(var(--progress));
+  transform-origin: left;
+}
+
+.bar-inner {
+  align-items: center;
+  max-width: calc(1360px + 2 * var(--margin));
+  height: var(--bar-h);
+  margin-inline: auto;
+  padding-inline: var(--margin);
+}
+
+.bar-name {
+  display: none;
+  font-weight: 700;
+  text-decoration-line: none;
+}
+
+.bar ul {
+  position: relative;
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  margin-inline: -8px;          /* the links carry 8px of padding each side */
+  font-size: clamp(0.8125rem, 4vw, 1rem);
+}
+
+/* The marker: one orange block that slides to whichever link is current. */
+.bar ul::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: var(--marker-w, 0);
+  height: 1.75em;
+  background: var(--accent);
+  transform: translate(var(--marker-x, 0), -50%);
+}
+
+.bar li a {
+  position: relative;
+  display: block;
+  padding-inline: 8px;
+  line-height: var(--bar-h);
+  text-decoration-line: none;
+}
+
+@media (hover: hover) {
+  .bar a:hover {
+    background: none;
+    box-shadow: none;
+    text-decoration-line: underline;
+    text-decoration-color: currentColor;
+  }
+}
+
+/* 8 Tablet: a label column (1-4) and a content column (5-12) --------------- */
+
+@media (min-width: 700px) {
+  :root {
+    --margin: 32px;
+  }
+
+  body {
+    font-size: 1.0625rem;
+  }
+
+  .hero {
+    padding-bottom: 24px;
+  }
+
+  .hero-nav ul {
+    justify-content: flex-start;
+    column-gap: 20px;
+  }
+
+  .lead,
+  .cta,
+  .row > .body,
+  .row > .items,
+  .row > .aside,
+  .footer > .colophon,
+  .footer > .source {
+    grid-column: 5 / -1;
+  }
+
+  .lead {
+    max-width: none;
+    font-size: 1.25rem;
+    font-size: clamp(1.125rem, 2.3cqw, 1.3125rem);
+    line-height: 1.4;
+  }
+
+  .section {
+    padding-top: 80px;
+  }
+
+  /* A label stays in view while the rest of its row scrolls past, so a long
+     group such as a team's projects never loses its heading. */
+  .row > .label {
+    grid-column: 1 / span 4;
+    grid-row: 1 / span 2;
+    position: sticky;
+    top: calc(var(--bar-h) + 20px);
+    align-self: start;
+  }
+
+  .row > .body,
+  .row > .items,
+  .row > .label-plain + .body,
+  .row > .label-plain + .items {
+    margin-top: 0;
+  }
+
+  .label-plain {
+    font-size: 1.0625rem;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  .label:not(.label-plain) {
+    margin-top: -0.1rem;        /* capitals level with the body text */
+  }
+
+  .section-contact {
+    margin-top: 80px;
+    padding-block: 44px 56px;
+  }
+
+  .footer > .copyright {
+    grid-column: 1 / span 4;
+    grid-row: 1 / span 2;
+  }
+
+  .footer a {
+    display: inline;
+    padding: 0;
+  }
+
+  .bar-name {
+    display: block;
+    grid-column: 1 / span 4;
+  }
+
+  .bar ul {
+    grid-column: 5 / -1;
+    justify-content: flex-start;
+    column-gap: 4px;
+    font-size: inherit;
+  }
+}
+
+/* 9 Desktop: three lines carry the page, at columns 1, 4 and 10 ------------- */
+
+@media (min-width: 1000px) {
+  :root {
+    --margin: 40px;
+    --gutter: 24px;
+    --bleed: var(--gutter);
+    --bar-h: 48px;
+    --name-w: calc(75cqw - var(--gutter) / 4);   /* KEVIN spans 9 of 12 columns */
+  }
+
+  .hero {
+    grid-template-rows: auto auto auto minmax(0, 1fr);
+    padding-block: 40px 16px;
+  }
+
+  .name-first {
+    grid-column: 1 / span 9;
+    grid-row: 1;
+  }
+
+  .name-last {
+    grid-column: 1 / span 9;
+    grid-row: 2 / span 3;
+  }
+
+  /* The orange block becomes a slab in the right-hand column, as tall as the
+     two lines of the name and pressed against the N. */
+  .block {
+    grid-column: 10 / span 3;
+    grid-row: 1 / span 4;
+    align-self: start;
+    height: calc(2 * var(--name-h) + var(--name-gap));
+    margin: 0 calc(-1 * var(--bleed)) 0 calc(-1 * var(--bleed) - 2px);
+  }
+
+  /* Section links in its top corner. */
+  .hero-nav {
+    grid-column: 10 / span 3;
+    grid-row: 1;
+    align-self: start;
+    margin-top: calc(var(--gutter) + var(--trim));
+    padding: 0;
+  }
+
+  .hero-nav ul,
+  .hero-links {
+    display: block;
+  }
+
+  .hero-nav a,
+  .hero-links a {
+    display: inline;
+    padding: 0;
+  }
+
+  /* Availability and contact links in its bottom corner. */
+  .cta {
+    grid-column: 10 / span 3;
+    grid-row: 2 / span 3;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: calc(var(--name-gap) + var(--name-h));
+    margin: 0;
+    padding-bottom: var(--gutter);
+  }
+
+  .status {
+    margin-bottom: 0.9em;
+  }
+
+  .status::before {
+    display: none;
+  }
+
+  .hero-links {
+    margin: 0 0 var(--trim);     /* last line sits one gutter above the edge */
+  }
+
+  /* The introduction hangs from the top of PI, on the paper. */
+  .role,
+  .lead {
+    grid-column: 4 / span 5;
+  }
+
+  .role {
+    grid-row: 2;
+    align-self: start;
+    margin: calc(var(--name-gap) + var(--trim)) 0 0;
+    font-size: clamp(1.0625rem, 1.5cqw, 1.3125rem);
+  }
+
+  .lead {
+    grid-row: 3;
+    margin-top: 0.9em;
+    font-size: clamp(1.0625rem, 1.5cqw, 1.3125rem);
+  }
+
+  /* On the slab a link is marked in black instead of orange. */
+  @media (hover: hover) {
+    .hero-nav a:hover,
+    .hero-links a:hover {
+      background: var(--ink);
+      box-shadow: 0 0 0 0.14em var(--ink);
+      color: var(--paper);
+    }
+  }
+
+  .section {
+    padding-top: 96px;
+  }
+
+  .section::before {
+    height: 12px;
+    margin-bottom: 22px;
+  }
+
+  .section > h1,
+  .section > h2 {
+    margin-bottom: 28px;
+  }
+
+  .row {
+    padding-block: 22px 28px;
+  }
+
+  .row > .label {
+    grid-column: 1 / span 3;
+    grid-row: auto;
+  }
+
+  .row > .body {
+    grid-column: 4 / span 5;
+  }
+
+  .row > .aside {
+    grid-column: 10 / span 3;
+    margin-top: 0;
+  }
+
+  .row > .items {
+    grid-column: 4 / -1;
+  }
+
+  .body,
+  .desc {
+    max-width: none;
+  }
+
+  /* Inside a team: title and description in 5 columns, result in the last 3. */
+  .item {
+    display: grid;
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    padding-block: 20px 22px;
+  }
+
+  .item .title {
+    grid-column: 1 / span 5;
+    grid-row: 1;
+  }
+
+  .item .desc {
+    grid-column: 1 / span 5;
+    grid-row: 2;
+  }
+
+  .result {
+    display: block;
+    grid-column: 7 / span 3;
+    grid-row: 1 / span 2;
+    margin-block: 0.17rem 0;    /* capitals level with the title */
+  }
+
+  .result strong {
+    display: block;
+    font-size: 1.75rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .result .small {
+    display: block;
+    margin-top: 6px;
+  }
+
+  .links {
+    display: block;
+  }
+
+  .links a {
+    display: inline;
+    padding: 0;
+  }
+
+  .stack {
+    margin-top: 10px;
+  }
+
+  .section-contact {
+    margin-top: 96px;
+    padding-block: 48px 64px;
+  }
+
+  .footer > .copyright {
+    grid-column: 1 / span 3;
+    grid-row: auto;
+  }
+
+  .footer > .colophon {
+    grid-column: 4 / span 5;
+  }
+
+  .footer > .source {
+    grid-column: 10 / span 3;
+  }
+
+  .bar-name {
+    grid-column: 1 / span 3;
+  }
+
+  .bar ul {
+    grid-column: 4 / -1;
+  }
+}
+
+/* 10 Motion ----------------------------------------------------------------- */
+
+/* Everything here is extra. With this block removed, with scripts off, or on
+   a device that asks for reduced motion, the page shows the same content in
+   the same place; nothing waits on an animation to become readable.
+
+   Four things move, all along the grid:
+   a  on load, the letters of the name rise into place and the block wipes in
+   b  the top of the page holds still and the rest slides up over it
+   c  as a section or row scrolls into view its rule draws from the left and
+      its text settles in (site.js adds "pre" to what is still below the
+      screen, then removes it as each piece arrives)
+   d  the pinned bar drops in, and its marker slides between section links */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* a */
+  .name path {
+    animation: rise 900ms var(--ease) backwards;
+  }
+
+  .name-first path:nth-child(2) { animation-delay: 50ms; }
+  .name-first path:nth-child(3) { animation-delay: 100ms; }
+  .name-first path:nth-child(4) { animation-delay: 150ms; }
+  .name-first path:nth-child(5) { animation-delay: 200ms; }
+  .name-last path:nth-child(1) { animation-delay: 250ms; }
+  .name-last path:nth-child(2) { animation-delay: 300ms; }
+
+  @keyframes rise {
+    from { transform: translateY(100%); }
+  }
+
+  .block {
+    animation: wipe 800ms var(--ease) 250ms backwards;
+  }
+
+  @keyframes wipe {
+    from { clip-path: inset(0 0 100% 0); }
+    to { clip-path: inset(0); }
+  }
+
+  .hero-nav,
+  .role,
+  .lead,
+  .cta {
+    animation: settle 600ms var(--ease) 550ms backwards;
+  }
+
+  @keyframes settle {
+    from { opacity: 0; transform: translateY(10px); }
+  }
+
+  /* b  --hero-h is the height of the top of the page, measured by site.js.
+     Until it is set, "top" is invalid and the page simply scrolls normally.
+     If the window is shorter than the top of the page, it scrolls until its
+     last line is in view and only then holds still. */
+  .hero {
+    position: sticky;
+    top: min(0px, calc(100vh - var(--hero-h)));
+    top: min(0px, calc(100svh - var(--hero-h)));
+    z-index: 0;
+  }
+
+  /* c */
+  .section::before,
+  .row::before,
+  .item + .item::before {
+    transition: transform 900ms var(--ease);
+  }
+
+  .section > h1,
+  .section > h2,
+  .row > :not(.items),
+  .item > * {
+    transition: opacity 600ms ease, transform 700ms var(--ease);
+  }
+
+  .row > .body { transition-delay: 60ms; }
+  .row > .aside { transition-delay: 120ms; }
+  .item > .result { transition-delay: 100ms; }
+
+  .section.pre::before,
+  .row.pre::before,
+  .item.pre::before {
+    transform: scaleX(0);
+  }
+
+  .section.pre > h2,
+  .row.pre > :not(.items),
+  .item.pre > * {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  /* d */
+  .bar {
+    transition: transform 350ms var(--ease), visibility 0s 350ms;
+  }
+
+  .is-pinned .bar {
+    transition-delay: 0s;
+  }
+
+  .bar ul::before {
+    transition: transform 350ms var(--ease), width 350ms var(--ease);
+  }
+}
+
+/* 11 Print ---------------------------------------------------------------- */
+
+@media print {
+  :root {
+    --paper: #fff;
+  }
+
+  .skip,
+  .hero-nav,
+  .bar {
+    display: none;
+  }
+
+  .hero {
+    position: static;
+  }
+
+  /* Print everything, including rows that had not scrolled into view yet. */
+  .section.pre > h2,
+  .row.pre > *,
+  .item.pre > * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .section.pre::before,
+  .row.pre::before,
+  .item.pre::before {
+    transform: none !important;
+  }
+
+  .name path,
+  .block,
+  .hero-nav,
+  .role,
+  .lead,
+  .cta {
+    animation: none !important;
+  }
+
+  .item {
+    break-inside: avoid;
+  }
+}
