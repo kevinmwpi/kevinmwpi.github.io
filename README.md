@@ -15,7 +15,7 @@ motion, and the page reads the same without it.
 | `assets/site.js` | Scroll motion only: about 170 commented lines, no dependencies. |
 | `assets/fonts/` | The two web fonts, with their license and a note on how they were made. |
 | `assets/og.png` | The image shown when the link is shared (1200 × 630). |
-| `assets/favicon.svg`, `favicon.ico`, `assets/apple-touch-icon.png` | Browser and home-screen icons: the initials KP, joined, in black on the blue. |
+| `assets/favicon.svg`, `favicon.ico`, `assets/apple-touch-icon.png` | Browser and home-screen icons: the initials KP in black on the blue. |
 | `404.html` | Shown for any address that does not exist. |
 | `.nojekyll` | Tells GitHub Pages to skip its Jekyll build. |
 
@@ -29,8 +29,7 @@ motion, and the page reads the same without it.
   `assets/style.css`.
 - **The tab icon:** `assets/favicon.svg` is the drawing; `favicon.ico` and
   `assets/apple-touch-icon.png` are pictures of it at 16, 32, 48 and 180
-  pixels. The 180-pixel one has more room around the letters, because phones
-  round the corners of home-screen icons.
+  pixels.
 - **After changing the stylesheet or an icon:** raise the `?v=` number on its
   link in `index.html` and `404.html`. Browsers keep a stylesheet for up to
   ten minutes and an icon for much longer; the new number makes them fetch
