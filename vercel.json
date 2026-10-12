@@ -3,6 +3,14 @@
   "framework": null,
   "outputDirectory": "public",
   "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.kevinpi.dev" }],
+      "destination": "https://kevinpi.dev/:path*",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
