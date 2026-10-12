@@ -1,5 +1,5 @@
 /*
-  kevinmwpi.github.io: scroll behaviour.
+  kevinpi.dev: scroll behaviour.
 
   The page is complete without this file. It only adds motion, and every part
   of it is paired with a block in assets/style.css ("Motion" and "Pinned bar").
