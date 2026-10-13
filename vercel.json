@@ -6,7 +6,13 @@
   "redirects": [
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "www.kevinpi.dev" }],
+      "has": [{ "type": "host", "value": "www\\.kevinpi\\.dev" }],
+      "destination": "https://kevinpi.dev/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "kevinswebsite\\.vercel\\.app" }],
       "destination": "https://kevinpi.dev/:path*",
       "permanent": true
     }
