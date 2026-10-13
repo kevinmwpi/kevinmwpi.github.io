@@ -12,8 +12,9 @@ the page reads the same without it.
 |---|---|
 | `public/index.html` | The whole page. All text lives here. |
 | `public/assets/style.css` | All styling, commented section by section. |
-| `public/assets/site.js` | Scroll motion only: about 170 commented lines, no dependencies. |
+| `public/assets/site.js` | Scroll motion only: about 140 commented lines, no dependencies. |
 | `public/assets/fonts/` | The two web fonts, with their license and a note on how they were made. |
+| `public/assets/flash-golf-870.webp`, `flash-golf-1740.webp` | Flash Golf screenshot (hole 3, Colour Keys) at two sizes; the browser picks one. |
 | `public/assets/og.png` | The image shown when the link is shared (1200 × 630). |
 | `public/assets/favicon.svg`, `public/favicon.ico`, `public/assets/apple-touch-icon.png` | Browser and home-screen icons: the initials KP in black on the blue. |
 | `public/404.html` | Shown for any address that does not exist. |
@@ -25,7 +26,13 @@ the page reads the same without it.
 - **Text:** edit `public/index.html`. Each section is marked with a comment
   (`<!-- Work -->`, `<!-- Projects -->`, and so on).
 - **A new project:** copy one `<div class="row is-link">` block inside the
-  Projects section and change its text and links.
+  Projects section and change its text and links. To give it a screenshot
+  or chart, add `has-figure` to the row's class and a `figure` element after
+  its `body`, as Flash Golf does.
+- **The MarketSignalOS chart** is a plain table in `public/index.html`. The
+  counts come from the project's gate attrition report of 2026-09-10. Each
+  bar's length is one rule in `public/assets/style.css` (search for
+  `data-left`): the count divided by 833.
 - **Colors, spacing, type sizes:** the variables at the top of
   `public/assets/style.css`.
 - **The tab icon:** `public/assets/favicon.svg` is the drawing;
@@ -76,10 +83,12 @@ See `public/assets/fonts/README.md` for its license.
 ## Color
 
 Black on off-white, plus one color: a baby blue (`--accent` at the top of
-`public/assets/style.css`). The blue is too light to read as text on the
-page, so it is only ever a field behind black text or a shape: the block
-beside the name, the bar that opens each section, the Contact section, the
-row under the pointer.
+`public/assets/style.css`). The blue marks where a visitor can act or reach
+Kevin: the block beside the name with its links, the Contact section, the
+row or link under the pointer, and the marker on the pinned bar. It is too
+light to read as text on the page, so it is only ever a field behind black
+text or a shape. The one other color on the page is the Flash Golf
+screenshot.
 
 The icons and the share image carry the same blue as a fixed value. If
 `--accent` changes, they need redrawing too.
@@ -96,8 +105,9 @@ motion.
   wipes in.
 - The top of the page holds still while the rest slides up over it, and the
   name turns from black to blue as it is covered.
-- Sections and rows that start below the screen settle in as they arrive:
-  the rule draws from the left, then the text.
 - Once the name is covered, a bar is pinned to the top with the section
   links, a marker on the section being read and a line showing progress
   through the page.
+
+Everything below the top of the page is simply there: nothing fades or
+slides in, so a reader scanning for one detail never waits for it.

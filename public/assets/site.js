@@ -7,7 +7,6 @@
   1  measure the top of the page, so it can hold still while the rest slides over
   2  publish two numbers while scrolling: --cover and --progress
   3  show the pinned bar and mark the section being read
-  4  let rows that start below the screen settle in as they arrive
 */
 (function () {
   "use strict";
@@ -140,29 +139,4 @@
   });
 
   measureHero();
-
-  // ---------------------------------------------------------------- 4
-  // Sections, rows and work items that start below the bottom of the window
-  // get the class "pre" (hidden, rule not yet drawn). When one scrolls into
-  // view the class is removed and the stylesheet animates it into place.
-  // Anything already on screen when the page loads is left alone, so nothing
-  // visible ever flashes or disappears.
-  if (!prefersLessMotion && "IntersectionObserver" in window) {
-    var observer = new IntersectionObserver(function (entries) {
-      for (var i = 0; i < entries.length; i++) {
-        if (entries[i].isIntersecting) {
-          entries[i].target.classList.remove("pre");
-          observer.unobserve(entries[i].target);
-        }
-      }
-    }, { rootMargin: "0px 0px -10% 0px" });
-
-    var pieces = document.querySelectorAll(".section, .row, .item");
-    for (var j = 0; j < pieces.length; j++) {
-      if (pieces[j].getBoundingClientRect().top > window.innerHeight) {
-        pieces[j].classList.add("pre");
-        observer.observe(pieces[j]);
-      }
-    }
-  }
 })();

@@ -211,15 +211,32 @@
           <p class="body">Personal projects from 2026, built largely by directing AI coding agents (Claude Code and Codex).</p>
         </div>
 
-        <div class="row is-link">
+        <div class="row is-link has-figure">
           <div class="label">
             <h3>MarketSignalOS</h3>
             <p class="kind small">Prediction-market research</p>
           </div>
           <div class="body">
             <p>Can you find Polymarket wallets whose trading shows real forecasting skill, and would following them have paid off after costs? MarketSignalOS collects public wallet history, scores each wallet with a Bayesian model of its edge over the market’s own prices, and surfaces a wallet only if it passes all 13 evidence gates.</p>
-            <p>Result so far: on a June 2026 snapshot of 833 wallets, none qualify, and the write-ups document why. One gate could not be tested on that data, so the after-costs question is still open.</p>
+            <p>Result so far: on a June 2026 snapshot of 833 wallets, none qualify, and the write-ups document why.</p>
             <p>The live dashboard is a static page showing a small, unscored sample of public trades, refreshed every six hours by GitHub Actions. The FastAPI service for scored signals is built and tested but not deployed.</p>
+          </div>
+          <!-- Counts from the project's gate attrition report (2026-09-10).
+               Bar widths are set in assets/style.css, one rule per count. -->
+          <div class="figure">
+            <table class="gates">
+              <caption>Wallets left after each gate, June 2026 snapshot</caption>
+              <tbody>
+                <tr><th scope="row">Wallets scored</th><td><span class="n">833</span><span class="length" data-left="833"></span></td></tr>
+                <tr><th scope="row">Complete data, gates&nbsp;1–6</th><td><span class="n">125</span><span class="length" data-left="125"></span></td></tr>
+                <tr><th scope="row">At least 20 settled events, gate&nbsp;7</th><td><span class="n">42</span><span class="length" data-left="42"></span></td></tr>
+                <tr><th scope="row">Skill and edge tests, gates&nbsp;8–9</th><td><span class="n">3</span><span class="length" data-left="3"></span></td></tr>
+                <tr><th scope="row">Profitable, gate&nbsp;10</th><td><span class="n">1</span><span class="length" data-left="1"></span></td></tr>
+                <tr><th scope="row">Recent activity and edge, gates&nbsp;11–12</th><td><span class="n">1</span><span class="length" data-left="1"></span></td></tr>
+                <tr><th scope="row">Closing-line value, gate&nbsp;13</th><td><span class="n">0</span></td></tr>
+              </tbody>
+            </table>
+            <p class="note small">Gate 13 needs each market’s price shortly before it closed. The snapshot held about 1.5&nbsp;days of prices against 4.5&nbsp;years of trades, so it could not test the last wallet, and whether following would pay after costs is still open.</p>
           </div>
           <div class="aside">
             <ul class="links">
@@ -230,7 +247,7 @@
           </div>
         </div>
 
-        <div class="row is-link">
+        <div class="row is-link has-figure">
           <div class="label">
             <h3>Flash Golf</h3>
             <p class="kind small">Co-op browser game</p>
@@ -238,6 +255,10 @@
           <div class="body">
             <p>A two-ball co-op golf puzzle game in the browser. Play both balls yourself, share one screen with a friend, or play online with a room code. The rules run as a deterministic 60&nbsp;Hz simulation, and online games run on an authoritative WebSocket server, so clients only draw what the server simulates. A beam-search solver plays the real simulation to check that every hole can be finished, and that the co-op holes can’t be finished by one ball alone.</p>
           </div>
+          <figure class="figure">
+            <img src="assets/flash-golf-870.webp" srcset="assets/flash-golf-870.webp 870w, assets/flash-golf-1740.webp 1740w" sizes="(min-width: 1440px) 553px, (min-width: 1000px) 39vw, (min-width: 700px) 62vw, 100vw" width="1740" height="979" alt="A Flash Golf hole: the blue golfer aims along a dotted arc toward a door, between a gate only the blue ball can pass and a gate only the red ball can pass." loading="lazy" decoding="async">
+            <figcaption class="small">Hole 3, Colour Keys. The dotted arc runs the real physics, and each coloured gate lets only its own ball through.</figcaption>
+          </figure>
           <div class="aside">
             <ul class="links">
               <li><a class="stretch" href="https://flash-golf.vercel.app">Play<span class="visually-hidden">: Flash Golf</span></a></li>

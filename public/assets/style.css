@@ -225,7 +225,8 @@ a:focus-visible {
 /* The name is drawn as outlines, one per letter, so it never waits on a font
    download and its edges sit exactly on the grid. The real heading is the
    hidden <h1>. As the page slides over it, it turns from black to the accent
-   color. */
+   color. The mix runs in OKLCH, so the colors in between are deep blues
+   rather than the gray an sRGB mix of black and blue passes through. */
 
 .name {
   display: block;
@@ -233,9 +234,9 @@ a:focus-visible {
   fill: var(--ink);
 }
 
-@supports (color: color-mix(in srgb, red, blue)) {
+@supports (color: color-mix(in oklch, red, blue)) {
   .name {
-    fill: color-mix(in srgb, var(--accent) calc(var(--cover) * 100%), var(--ink));
+    fill: color-mix(in oklch, var(--accent) calc(var(--cover) * 100%), var(--ink));
   }
 }
 
@@ -329,26 +330,15 @@ a:focus-visible {
 }
 
 .section {
-  padding-top: 56px;
+  padding-top: 80px;
   scroll-margin-top: var(--bar-h);   /* a jump lands just below the pinned bar */
-}
-
-/* Each section opens with an accent bar three columns wide. */
-.section::before {
-  content: "";
-  display: block;
-  width: calc((100cqw - 11 * var(--gutter)) / 4 + 2 * var(--gutter));
-  height: 10px;
-  margin-bottom: 18px;
-  background: var(--accent);
-  transform-origin: left;
 }
 
 .section > h1,
 .section > h2 {
   margin: 0 0 22px -0.04em;     /* pulls the first letter onto the margin */
-  font-size: 2.75rem;           /* for browsers without container units */
-  font-size: clamp(2.75rem, 6cqw, 4.75rem);
+  font-size: 3rem;              /* for browsers without container units */
+  font-size: clamp(3rem, 6cqw, 4.5rem);
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.035em;
@@ -374,7 +364,6 @@ a:focus-visible {
   inset: 0 0 auto;
   height: 1px;
   background: var(--ink);
-  transform-origin: left;
 }
 
 .row > * {
@@ -472,6 +461,99 @@ a:focus-visible {
   font-variant-numeric: tabular-nums;
 }
 
+/* Evidence for a project: a chart or a screenshot, under its description and
+   aligned with it. No frame, shadow or rounding: the picture sits on the grid
+   like the text does. */
+
+.figure {
+  margin: 20px 0 0;
+}
+
+.figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.figure figcaption,
+.figure .note {
+  max-width: 36em;
+  margin-top: 8px;
+}
+
+/* MarketSignalOS: wallets left after each gate. A table, so every number can
+   be read and copied; the bars only show the scale of each drop. */
+
+.gates {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 0.875rem;
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+}
+
+.gates caption {
+  padding-bottom: 8px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.gates th,
+.gates td {
+  padding-block: 6px;
+  border-top: 1px solid var(--rule);
+  vertical-align: middle;
+}
+
+.gates tr:last-child > * {
+  border-bottom: 1px solid var(--rule);
+}
+
+.gates th {
+  width: 64%;
+  padding-right: 12px;
+  font-weight: 400;
+  text-align: left;
+}
+
+@media (min-width: 700px) {
+  .gates th {
+    width: 60%;
+  }
+}
+
+.gates td {
+  white-space: nowrap;
+}
+
+.gates .n {
+  display: inline-block;
+  width: 3ch;
+  margin-right: 10px;
+  font-weight: 700;
+  text-align: right;
+}
+
+/* Bar length = wallets left / 833. A bar that would be thinner than 2px is
+   drawn at 2px, so one wallet still shows; zero has no bar. (Named "length"
+   because .bar is the pinned navigation bar.) */
+.gates .length {
+  display: inline-block;
+  width: calc((100% - 3ch - 10px) * var(--share));
+  min-width: 2px;
+  height: 10px;
+  border-radius: 0 4px 4px 0;
+  vertical-align: -1px;
+  background: var(--ink);
+}
+
+.gates .length[data-left="833"] { --share: 1; }
+.gates .length[data-left="125"] { --share: 0.15006; }
+.gates .length[data-left="42"]  { --share: 0.05042; }
+.gates .length[data-left="3"]   { --share: 0.0036; }
+.gates .length[data-left="1"]   { --share: 0.0012; }
+
 /* Project and contact links. */
 
 .links {
@@ -553,13 +635,9 @@ a:focus-visible {
 /* Contact is the second accent field: the page opens and closes on color. */
 
 .section-contact {
-  margin: 56px calc(-1 * var(--bleed)) 0;
-  padding: 36px var(--bleed) 44px;
+  margin: 80px calc(-1 * var(--bleed)) 0;
+  padding: 40px var(--bleed) 44px;
   background: var(--accent);
-}
-
-.section-contact::before {
-  background: var(--ink);
 }
 
 .section-contact .label-plain {
@@ -684,7 +762,7 @@ a:focus-visible {
   }
 
   body {
-    font-size: 1.0625rem;
+    font-size: 1.125rem;
   }
 
   .hero {
@@ -700,6 +778,7 @@ a:focus-visible {
   .cta,
   .row > .body,
   .row > .items,
+  .row > .figure,
   .row > .aside,
   .footer > .colophon,
   .footer > .source {
@@ -714,7 +793,7 @@ a:focus-visible {
   }
 
   .section {
-    padding-top: 80px;
+    padding-top: 104px;
   }
 
   /* A label stays in view while the rest of its row scrolls past, so a long
@@ -735,7 +814,7 @@ a:focus-visible {
   }
 
   .label-plain {
-    font-size: 1.0625rem;
+    font-size: 1.125rem;
     line-height: 1.5;
     color: var(--ink);
   }
@@ -745,8 +824,8 @@ a:focus-visible {
   }
 
   .section-contact {
-    margin-top: 80px;
-    padding-block: 44px 56px;
+    margin-top: 104px;
+    padding-block: 48px 56px;
   }
 
   .footer > .copyright {
@@ -863,13 +942,13 @@ a:focus-visible {
     grid-row: 2;
     align-self: start;
     margin: calc(var(--name-gap) + var(--trim)) 0 0;
-    font-size: clamp(1.0625rem, 1.5cqw, 1.3125rem);
+    font-size: clamp(1.125rem, 1.5cqw, 1.3125rem);
   }
 
   .lead {
     grid-row: 3;
     margin-top: 0.9em;
-    font-size: clamp(1.0625rem, 1.5cqw, 1.3125rem);
+    font-size: clamp(1.125rem, 1.5cqw, 1.3125rem);
   }
 
   /* On the slab a link is marked in black instead of the accent. */
@@ -883,12 +962,7 @@ a:focus-visible {
   }
 
   .section {
-    padding-top: 96px;
-  }
-
-  .section::before {
-    height: 12px;
-    margin-bottom: 22px;
+    padding-top: 128px;
   }
 
   .section > h1,
@@ -916,6 +990,26 @@ a:focus-visible {
 
   .row > .items {
     grid-column: 4 / -1;
+  }
+
+  /* A project's chart or screenshot sits under its description, in the same
+     five columns, with the links staying beside the description. */
+  .row > .figure {
+    grid-column: 4 / span 5;
+    margin-top: 24px;
+  }
+
+  .row.has-figure > .label {
+    grid-row: 1 / span 2;
+  }
+
+  .row.has-figure > .body,
+  .row.has-figure > .aside {
+    grid-row: 1;
+  }
+
+  .row.has-figure > .figure {
+    grid-row: 2;
   }
 
   .body,
@@ -950,7 +1044,7 @@ a:focus-visible {
 
   .result strong {
     display: block;
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     line-height: 1;
     letter-spacing: -0.02em;
   }
@@ -974,8 +1068,8 @@ a:focus-visible {
   }
 
   .section-contact {
-    margin-top: 96px;
-    padding-block: 48px 64px;
+    margin-top: 128px;
+    padding-block: 52px 64px;
   }
 
   .footer > .copyright {
@@ -1006,13 +1100,13 @@ a:focus-visible {
    a device that asks for reduced motion, the page shows the same content in
    the same place; nothing waits on an animation to become readable.
 
-   Four things move, all along the grid:
+   Three things move, all along the grid:
    a  on load, the letters of the name rise into place and the block wipes in
    b  the top of the page holds still and the rest slides up over it
-   c  as a section or row scrolls into view its rule draws from the left and
-      its text settles in (site.js adds "pre" to what is still below the
-      screen, then removes it as each piece arrives)
-   d  the pinned bar drops in, and its marker slides between section links */
+   c  the pinned bar drops in, and its marker slides between section links
+
+   Content below the top of the page does not animate in. It is there to be
+   read, and a reader scanning for one detail should never wait for it. */
 
 @media (prefers-reduced-motion: no-preference) {
   /* a */
@@ -1063,37 +1157,6 @@ a:focus-visible {
   }
 
   /* c */
-  .section::before,
-  .row::before,
-  .item + .item::before {
-    transition: transform 900ms var(--ease);
-  }
-
-  .section > h1,
-  .section > h2,
-  .row > :not(.items),
-  .item > * {
-    transition: opacity 600ms ease, transform 700ms var(--ease);
-  }
-
-  .row > .body { transition-delay: 60ms; }
-  .row > .aside { transition-delay: 120ms; }
-  .item > .result { transition-delay: 100ms; }
-
-  .section.pre::before,
-  .row.pre::before,
-  .item.pre::before {
-    transform: scaleX(0);
-  }
-
-  .section.pre > h2,
-  .row.pre > :not(.items),
-  .item.pre > * {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-
-  /* d */
   .bar {
     transition: transform 350ms var(--ease), visibility 0s 350ms;
   }
@@ -1124,20 +1187,6 @@ a:focus-visible {
     position: static;
   }
 
-  /* Print everything, including rows that had not scrolled into view yet. */
-  .section.pre > h2,
-  .row.pre > *,
-  .item.pre > * {
-    opacity: 1 !important;
-    transform: none !important;
-  }
-
-  .section.pre::before,
-  .row.pre::before,
-  .item.pre::before {
-    transform: none !important;
-  }
-
   .name path,
   .block,
   .hero-nav,
@@ -1147,7 +1196,8 @@ a:focus-visible {
     animation: none !important;
   }
 
-  .item {
+  .item,
+  .figure {
     break-inside: avoid;
   }
 }
